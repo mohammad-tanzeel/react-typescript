@@ -1,60 +1,79 @@
 import React, { useState } from "react";
+import Button from "../../component/button";
+import { useForm } from "react-hook-form";
 
-interface IUser {
+interface IUserLogin {
   email: string;
   password: string;
 }
 
 const Login: React.FC = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<IUserLogin>();
   //   const [username, setUsername] = React.useState<IUser>({ email: "" });
 
-  const [user, setUserData] = useState<IUser>({
-    email: "",
-    password: "",
-  });
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    const { name, value } = e.target;
-    setUserData({ ...user, [name]: value });
+  //   const [user, setUserData] = useState<IUserLogin>({
+  //     email: "",
+  //     password: "",
+  //   });
+  //   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+  //     const { name, value } = e.target;
+  //     setUserData({ ...user, [name]: value });
+  //   };
+  //   //   const handleClick = () => {
+  //     console.log("user", user);
+  //   };
+
+  //   const handleClick = (): void => {
+  //     console.log("Button was clicked!");
+  //   };
+  const onSubmit = (data: IUserLogin) => {
+    console.log(data);
+    // setJson(JSON.stringify(data));
   };
   return (
-    <div className="container">
+    <div className="container mt-3">
       <div className="w-50">
-        <form className="card p-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="card p-4">
           <h1>Login Form</h1>
-          <div className="form-group">
-            <label htmlFor="exampleInputEmail1">Email address</label>
+          <div className="form-group mb-3">
             <input
               type="email"
-              name="email"
               className="form-control"
               id="exampleInputEmail1"
               aria-describedby="emailHelp"
-              value={user.email}
-              onChange={handleChange}
+              {...register("email", {
+                required: "Email is required",
+              })}
+              placeholder="Email"
             />
+            {errors.email && (
+              <div className="error text-danger">{errors.email.message}</div>
+            )}
           </div>
-          <div className="form-group">
-            <label htmlFor="exampleInputPassword1">Password</label>
+          <div className="form-group mb-3">
             <input
-              type="password"
-              name="password"
               className="form-control"
               id="exampleInputPassword1"
-              value={user.password}
-              onChange={handleChange}
+              {...register("password", {
+                required: "Password is required",
+              })}
+              placeholder="Password"
             />
+            {errors.password && (
+              <div className="error">{errors.password.message}</div>
+            )}
           </div>
-          <div className="form-check">
-            <input
-              type="checkbox"
-              className="form-check-input"
-              id="exampleCheck1"
-            />
-          </div>
-          <button type="submit" className="btn btn-primary">
-            Submit
-          </button>
-          <p>{JSON.stringify(user)}</p>
+          <Button
+            // handleClick=''
+            label="Submit"
+            classStyle="btn btn-primary"
+          />
+
+          {/* <p>{JSON.stringify(user)}</p> */}
         </form>
       </div>
     </div>
